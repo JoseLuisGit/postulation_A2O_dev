@@ -19,12 +19,12 @@ class ProcessorPaddleLeague
         $this->paddleLeague = new PaddleLeague();
     }
 
-    public function processText($contentText)
+    public function processText($word)
     {
 
         try {
-            $contentText = trim($contentText);
-            $separatingArrayCategoryString = explode('FIN', $contentText);
+            $word = trim($word);
+            $separatingArrayCategoryString = explode('FIN', $word);
             $separatingArrayCategoryString = array_diff($separatingArrayCategoryString, [""]);
             $separatingArrayCategoryString =  array_values($separatingArrayCategoryString);
 
