@@ -16,6 +16,7 @@ class ProcessorStringValue
     public function __construct()
     {
         $this->stringValue = new StringValue();
+        $this->error = new Error();
     }
 
 
@@ -23,7 +24,7 @@ class ProcessorStringValue
     public function processorStringValue($string)
     {
         $string = trim($string);
-        if (!preg_match("/[a-z]/", $string)) {
+        if (preg_match("/[a-z]/", $string) === 1) {
             $this->error->setMessage("Invalid Data");
             return false;
         }
@@ -49,6 +50,7 @@ class ProcessorStringValue
 
     public function getMaxStringValue()
     {
+
         return $this->stringValue->getValueMax();
     }
 }

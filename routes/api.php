@@ -21,3 +21,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/paddleleague', 'PaddleLeagueController@paddleLeague');
 Route::get('/queenattack', 'QueenAttackController@queenAttack');
+Route::get('/stringvalue', 'StringValueController@stringValue');

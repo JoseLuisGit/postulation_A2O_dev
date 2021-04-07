@@ -23,8 +23,10 @@ class StringValue
     public function getValueMax()
     {
         usort($this->subStringsValue, function ($subStringsValue_a, $subStringsValue_b) {
-            return $subStringsValue_a->value > $subStringsValue_b->value;
+            return $subStringsValue_a->value < $subStringsValue_b->value;
         });
+
+
 
         return $this->subStringsValue[0]->getValue();
     }
