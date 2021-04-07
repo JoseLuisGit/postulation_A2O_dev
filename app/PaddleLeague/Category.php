@@ -3,31 +3,30 @@
 namespace App\PaddleLeague;
 
 use App\PaddleLeague\Partnet;
-
+use App\PaddleLeague\Encounter;
 
 class Category
 {
     public $name;
     public $participants;
-    public $numberOfEncounters;
+
+    public $encounters;
+
 
     public function __construct($name)
     {
         $this->name = $name;
         $this->participants = array();
-        $this->numberOfEncounters =  0;
+        $this->encounters = array();
     }
 
 
     public function getNumberEncounters()
     {
-        return $this->numberOfEncounters;
+        return count($this->encounters);
     }
 
-    public function sumEncounters()
-    {
-        $this->numberOfEncounters++;
-    }
+
 
     public function getWinner()
     {
@@ -36,11 +35,21 @@ class Category
             return $participant_a->points > $participant_b->points;
         });
         $lengthListParticipants = count($this->participants);
-        if ($this->participants[$lengthListParticipants - 1]->getPoints() == $this->participants[$lengthListParticipants - 2]->getPoints()) {
-            return 'EMPATE';
+
+        if (count($this->participants) > 0) {
+            if ($this->participants[$lengthListParticipants - 1]->getPoints() == $this->participants[$lengthListParticipants - 2]->getPoints()) {
+                return 'EMPATE';
+            } else {
+                return $this->participants[$lengthListParticipants - 1]->getName();
+            }
         } else {
-            return $this->participants[$lengthListParticipants - 1]->getName();
+            return '';
         }
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     public function addParticipant(Partnet $participant)
@@ -52,6 +61,26 @@ class Category
     {
         $found_key =  array_search($nameParticipant, array_column($this->participants, 'name'));
         return strlen($found_key) !== 0;
+    }
+
+    public function addEncounter(Encounter $encounter)
+    {
+        if ($this->isLocalOrVisitorEncounter($encounter)) {
+            $this->encounters[] = $encounter;
+            return true;
+        }
+        return false;
+    }
+
+    public function isLocalOrVisitorEncounter(Encounter $newEncounter)
+    {
+        foreach ($this->encounters as $encounter) {
+            if ($encounter->local->getName() === $newEncounter->local->getName() && $encounter->visitor->getName() === $newEncounter->visitor->getName()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

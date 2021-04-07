@@ -15,7 +15,7 @@ class ProcessorPaddleLeague
     public Error $error;
     public function __construct()
     {
-
+        $this->error = new Error();
         $this->paddleLeague = new PaddleLeague();
     }
 
@@ -28,57 +28,72 @@ class ProcessorPaddleLeague
             $separatingArrayCategoryString = array_diff($separatingArrayCategoryString, [""]);
             $separatingArrayCategoryString =  array_values($separatingArrayCategoryString);
 
+
+            unset($separatingArrayCategoryString[count($separatingArrayCategoryString) - 1]);
+
             $shortCut = $this->paddleLeague;
+
+            $category = new Category('');
+
             foreach ($separatingArrayCategoryString as $keycategory => $categoryString) {
+                if (trim($categoryString) != "") {
 
-                $separatingArrayPartnetWithResultString  = preg_split("/[\s]/", trim($categoryString));
-                $separatingArrayPartnetWithResultString = array_diff($separatingArrayPartnetWithResultString, [""]);
-                $separatingArrayPartnetWithResultString = array_values($separatingArrayPartnetWithResultString);
-                $iterationPartnetResult = 0;
+                    $separatingArrayPartnetString  = preg_split("[\n]", trim($categoryString));
+                    $separatingArrayPartnetString = array_diff($separatingArrayPartnetString, [""]);
+                    $separatingArrayPartnetString = array_values($separatingArrayPartnetString);
+                    $iterationPartnetResult = 0;
 
-                $lenghtArrayPartnetResult = count($separatingArrayPartnetWithResultString);
-
-                $category = new Category('');
-
-
-                while ($lenghtArrayPartnetResult > $iterationPartnetResult) {
-
-                    $data = $separatingArrayPartnetWithResultString[$iterationPartnetResult];
+                    $lenghtArrayPartnetResult = count($separatingArrayPartnetString);
 
 
-                    if (strlen($data) > 16) {
-                        $this->error->setMessage("Error: Lenght Max String 16 ");
-                        return false;
-                    } {
+
+                    while ($lenghtArrayPartnetResult > $iterationPartnetResult) {
+
+                        $data = $separatingArrayPartnetString[$iterationPartnetResult];
+
+
                         if ($iterationPartnetResult == 0) {
                             $shortCut->addcategory(new Category($data));
                             $category = $this->paddleLeague->category[$keycategory];
                         } else {
-                            $local =  $separatingArrayPartnetWithResultString[$iterationPartnetResult];
-                            $scoreLocal = $separatingArrayPartnetWithResultString[$iterationPartnetResult + 1];
-                            $visitor = $separatingArrayPartnetWithResultString[$iterationPartnetResult + 2];
-                            $scoreVisitor = $separatingArrayPartnetWithResultString[$iterationPartnetResult + 3];
-                            $category->sumEncounters();
-                            if (!$category->existParticipant($local)) {
-                                $category->addParticipant(new Partnet($local));
-                            }
+                            $datasEncounter = preg_split("/[\s]/", $data);
+                            $datasEncounter = array_diff($datasEncounter, [""]);
+                            $datasEncounter = array_values($datasEncounter);
+                            if (count($datasEncounter) == 4) {
 
-                            if (!$category->existParticipant($visitor)) {
-                                $category->addParticipant(new Partnet($visitor));
-                            }
+                                $local =  $datasEncounter[0];
+                                $scoreLocal = $datasEncounter[1];
+                                $visitor = $datasEncounter[2];
+                                $scoreVisitor = $datasEncounter[3];
 
-                            if ($scoreLocal > $scoreVisitor) {
-                                $category->participants[$category->positionParticipant($local)]->scorePoints(ConstantsPaddleLeague::VICTORY);
-                                $category->participants[$category->positionParticipant($visitor)]->scorePoints(ConstantsPaddleLeague::DEFEAT);
-                            } elseif ($scoreLocal < $scoreVisitor) {
-                                $category->participants[$category->positionParticipant($local)]->scorePoints(ConstantsPaddleLeague::DEFEAT);
-                                $category->participants[$category->positionParticipant($visitor)]->scorePoints(ConstantsPaddleLeague::VICTORY);
+                                if (!$category->existParticipant($local)) {
+                                    $category->addParticipant(new Partnet($local));
+                                }
+
+                                if (!$category->existParticipant($visitor)) {
+                                    $category->addParticipant(new Partnet($visitor));
+                                }
+
+                                $localPartnet =  $category->participants[$category->positionParticipant($local)];
+                                $visitorPartnet =  $category->participants[$category->positionParticipant($visitor)];
+                                if (!$category->addEncounter(new Encounter($localPartnet, $scoreLocal, $visitorPartnet, $scoreVisitor))) {
+                                    $this->error->setMessage("repeated encounters");
+                                    return false;
+                                }
+                                if ($scoreLocal > $scoreVisitor) {
+                                    $localPartnet->scorePoints(ConstantsPaddleLeague::VICTORY);
+                                    $visitorPartnet->scorePoints(ConstantsPaddleLeague::DEFEAT);
+                                } elseif ($scoreLocal < $scoreVisitor) {
+                                    $localPartnet->scorePoints(ConstantsPaddleLeague::DEFEAT);
+                                    $visitorPartnet->scorePoints(ConstantsPaddleLeague::VICTORY);
+                                } else {
+                                    $this->error->setMessage("repeated scores");
+                                    return false;
+                                }
                             } else {
-
+                                $this->error->setMessage("invalid data");
                                 return false;
                             }
-
-                            $iterationPartnetResult += 3;
                         }
 
 
@@ -88,7 +103,7 @@ class ProcessorPaddleLeague
             }
             return true;
         } catch (Exception $e) {
-            $this->error->setMessage("Error: String Invalid");
+            $this->error->setMessage($e);
             return false;
         }
     }
@@ -97,8 +112,11 @@ class ProcessorPaddleLeague
     {
         $response = '';
         $category = $this->paddleLeague->category;
+
         foreach ($category as $datacategory) {
-            $response = $response + $datacategory->getWinner() . ' ' . $datacategory->getGamesNotPlayed() . "\n";
+
+
+            $response = $response . $datacategory->getWinner() . ' ' . $datacategory->getGamesNotPlayed() . "\n";
         }
 
         return $response;

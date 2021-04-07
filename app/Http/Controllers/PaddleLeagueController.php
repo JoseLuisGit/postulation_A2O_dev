@@ -11,10 +11,10 @@ class PaddleLeagueController extends Controller
     {
 
         $processorPaddleLeague = new ProcessorPaddleLeague();
-        if ($processorPaddleLeague->processText($request->text)) {
-            return response()->json(["result", $processorPaddleLeague->responsePaddleLeague()], 200);
-        } else {
-            return response()->json(["error", $processorPaddleLeague->error->getMessage()], 422);
-        }
+
+        return $processorPaddleLeague->processText($request->text) ?
+            response()->json(["result" => $processorPaddleLeague->responsePaddleLeague()], 200)
+            :
+            response()->json(["error" => $processorPaddleLeague->error->getMessage()], 422);
     }
 }
