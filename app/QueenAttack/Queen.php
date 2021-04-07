@@ -21,6 +21,8 @@ class Queen
         return $this->position;
     }
 
+
+
     public function addPointFreeOfPosition(Point $point)
     {
         $this->pointFreeOfPosition[] =  $point;

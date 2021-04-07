@@ -20,4 +20,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/paddleleague', 'PaddleLeagueController@paddleLeague');
-Route::get('/queenattack', 'PaddleLeagueController@queenAttack');
+Route::get('/queenattack', 'QueenAttackController@queenAttack');

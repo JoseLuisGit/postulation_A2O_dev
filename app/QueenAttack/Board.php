@@ -30,11 +30,20 @@ class Board
         $this->queen = $queen;
     }
 
-    public function fillObstacles($obstacles)
+    public function fillObstacles($obstacle)
     {
-        foreach ($obstacles as $obstacle) {
-            $this->board[$obstacle->row][$obstacle->column] = "X";
+        $positionQueen = $this->queen->getPosition();
+
+        if (!$this->pointInRangeDimensionBoard($obstacle->row, $obstacle->column) && $positionQueen->row === $obstacle->row && $positionQueen->column === $obstacle->column) {
+            return false;
         }
+        $this->board[$obstacle->row][$obstacle->column] = "X";
+        return true;
+    }
+
+    public function pointInRangeDimensionBoard($row, $column)
+    {
+        return is_int($row) && is_int($column) && (($this->dimension - 1) <= $row && ($row >= 0)) || (($this->dimension - 1) <= $column && $column >= 0);
     }
 
     public function printBoard()
