@@ -1,6 +1,6 @@
 <template>
 <main id="main">
-<div class="container-fluid page page-problem">
+<section class="container-fluid page page-problem">
         <div class=" button-back" v-on:click="$router.push('/')">
 &#8592;
      </div>
@@ -42,9 +42,7 @@ String Value
  
 </div>
 
-<div class="col-sm-12">
-<div ></div>
-</div>
+
   <div  v-if="result!=''"  class="col-sm-12 button-detail" v-on:click="scrollToDetail()" >
 
 &#8595;
@@ -55,11 +53,11 @@ String Value
 
 
   
- </div>
+</section>
 
- <div v-if="result!=''" id="detail" class="container-fluid page page-start  ">
+ <section v-if="result!=''" id="detail" class="container-fluid page page-start  ">
 
-   <div :class="{'content-detail': subStrings.length>10 }">
+   <div :class="{'content-detail content-detail-group': subStrings.length>10 }">
 
 <table class="table table-dark ">
   <thead>
@@ -82,7 +80,7 @@ String Value
   </tbody>
 </table>
    </div>
- </div>
+ </section>
 </main>
    
 </template>
@@ -113,7 +111,6 @@ export default {
         scrollToDetail() {
      const el = this.$el.querySelector("#detail");
     if (el) {
-      // Use el.scrollIntoView() to instantly scroll to the element
       el.scrollIntoView({behavior: 'smooth'});
     }
 

@@ -140,4 +140,9 @@ class ProcessorPaddleLeague
 
         return $response;
     }
+
+    public function getCategories()
+    {
+        return $this->paddleLeague->category;
+    }
 }

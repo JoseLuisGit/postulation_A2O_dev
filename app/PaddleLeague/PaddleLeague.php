@@ -15,9 +15,9 @@ class PaddleLeague
     }
 
 
-    public function addCategory($name)
+    public function addCategory(Category $name)
     {
-        $this->category[] = new Category($name);
+        $this->category[] = $name;
     }
 
     public function existCategory($name)

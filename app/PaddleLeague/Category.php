@@ -32,15 +32,14 @@ class Category
     {
 
         usort($this->participants, function ($participant_a, $participant_b) {
-            return $participant_a->points > $participant_b->points;
+            return $participant_a->points < $participant_b->points;
         });
-        $lengthListParticipants = count($this->participants);
 
         if (count($this->participants) > 0) {
-            if ($this->participants[$lengthListParticipants - 1]->getPoints() == $this->participants[$lengthListParticipants - 2]->getPoints()) {
+            if ($this->participants[0]->getPoints() == $this->participants[1]->getPoints()) {
                 return 'EMPATE';
             } else {
-                return $this->participants[$lengthListParticipants - 1]->getName();
+                return $this->participants[0]->getName();
             }
         } else {
             return '';

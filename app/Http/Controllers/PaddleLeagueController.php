@@ -13,7 +13,7 @@ class PaddleLeagueController extends Controller
         $processorPaddleLeague = new ProcessorPaddleLeague();
 
         return $processorPaddleLeague->processText($request->text) ?
-            response()->json(["result" => $processorPaddleLeague->responsePaddleLeague()], 200)
+            response()->json(["result" => $processorPaddleLeague->responsePaddleLeague(), 'categories' => $processorPaddleLeague->getCategories()], 200)
             :
             response()->json(["error" => $processorPaddleLeague->error->getMessage()], 422);
     }
