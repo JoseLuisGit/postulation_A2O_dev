@@ -102,8 +102,9 @@ font-weight: 600;
   left: 0px;
   font-size: 50px;
   color: white;
-
    cursor: pointer;
+   justify-content: center;
+      z-index: 100;
 }
 
 .button-back:hover{
@@ -215,7 +216,7 @@ white-space: normal;
   }}
  
 @media only screen and (max-width: 600px) { .button-back{
-    margin-left: 8%;
+    margin-left: 2%;
   }}
 @media only screen and (min-width: 600px) { .button-back{
     margin-left: 5%;
