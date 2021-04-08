@@ -20,5 +20,9 @@
         "vue": "^2.5.17",
         "vue-router": "^3.0.1",
         "vue-template-compiler": "^2.6.12"
+    },
+    "dependencies": {
+        "animate.css": "^4.1.1",
+        "vue-page-transition": "^0.2.2"
     }
 }

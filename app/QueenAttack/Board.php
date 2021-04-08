@@ -43,7 +43,12 @@ class Board
 
     public function pointInRangeDimensionBoard($row, $column)
     {
-        return is_int($row) && is_int($column) && (($this->dimension - 1) <= $row && ($row >= 0)) || (($this->dimension - 1) <= $column && $column >= 0);
+        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension - 1) <= $row && ($row >= 0)) || (($this->dimension - 1) <= $column && $column >= 0);
+    }
+
+    private function isInt($number)
+    {
+        return preg_match('/^-?[0-9]+$/', $number);
     }
 
     public function printBoard()

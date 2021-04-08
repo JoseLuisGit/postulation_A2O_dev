@@ -19,6 +19,6 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/paddleleague', 'PaddleLeagueController@paddleLeague');
-Route::get('/queenattack', 'QueenAttackController@queenAttack');
-Route::get('/stringvalue', 'StringValueController@stringValue');
+Route::post('/paddleleague', 'PaddleLeagueController@paddleLeague');
+Route::post('/queenattack', 'QueenAttackController@queenAttack');
+Route::post('/stringvalue', 'StringValueController@stringValue');

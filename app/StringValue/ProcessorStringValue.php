@@ -24,7 +24,7 @@ class ProcessorStringValue
     public function processorStringValue($string)
     {
         $string = trim($string);
-        if (preg_match("/[a-z]/", $string) === 1) {
+        if (!preg_match("/^[a-z]+$/", $string)) {
             $this->error->setMessage("Invalid Data");
             return false;
         }

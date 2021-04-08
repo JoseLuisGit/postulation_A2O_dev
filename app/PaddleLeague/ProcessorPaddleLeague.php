@@ -24,15 +24,18 @@ class ProcessorPaddleLeague
 
         try {
             $word = trim($word);
+            $countFINInWord = substr_count($word, 'FIN');
             $separatingArrayCategoryString = explode('FIN', $word);
             $separatingArrayCategoryString = array_diff($separatingArrayCategoryString, [""]);
             $separatingArrayCategoryString =  array_values($separatingArrayCategoryString);
 
-
-            unset($separatingArrayCategoryString[count($separatingArrayCategoryString) - 1]);
-
             $shortCut = $this->paddleLeague;
 
+
+            if ($countFINInWord !== count($separatingArrayCategoryString)) {
+                $this->error->setMessage("invalid data");
+                return false;
+            }
             $category = new Category('');
 
             foreach ($separatingArrayCategoryString as $keycategory => $categoryString) {
@@ -53,6 +56,10 @@ class ProcessorPaddleLeague
 
 
                         if ($iterationPartnetResult == 0) {
+                            if (strlen($data) > 16 || !preg_match("/^[a-z]+$/i", $data)) {
+                                $this->error->setMessage("invalid category name: " . $data);
+                                return false;
+                            }
                             $shortCut->addcategory(new Category($data));
                             $category = $this->paddleLeague->category[$keycategory];
                         } else {
@@ -62,9 +69,21 @@ class ProcessorPaddleLeague
                             if (count($datasEncounter) == 4) {
 
                                 $local =  $datasEncounter[0];
+
                                 $scoreLocal = $datasEncounter[1];
+
                                 $visitor = $datasEncounter[2];
                                 $scoreVisitor = $datasEncounter[3];
+
+                                if (!is_numeric($scoreLocal) || !is_numeric($scoreVisitor)) {
+                                    $this->error->setMessage("invalid score");
+                                    return false;
+                                }
+
+                                if (strlen($local) > 16 ||  !preg_match("/^[a-z]+$/i", $local) || strlen($visitor) > 16 || !preg_match("/^[a-z]+$/i", $visitor)) {
+                                    $this->error->setMessage("invalid name partnet");
+                                    return false;
+                                }
 
                                 if (!$category->existParticipant($local)) {
                                     $category->addParticipant(new Partnet($local));
@@ -103,10 +122,12 @@ class ProcessorPaddleLeague
             }
             return true;
         } catch (Exception $e) {
-            $this->error->setMessage($e);
+            $this->error->setMessage("invalid string");
             return false;
         }
     }
+
+
 
     public function responsePaddleLeague()
     {

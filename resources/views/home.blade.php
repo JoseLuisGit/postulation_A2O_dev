@@ -14,15 +14,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
      <link href="css/bootstrap.min.css" rel="stylesheet"> 
      <link href="css/styles.css" rel="stylesheet"> 
+     <link href="css/app.css" rel="stylesheet"> 
 </head>
 <body>
 	<div id="app">
 
 		
 	
-		<transition name="slide-fade" mode="out-in">
+		<vue-page-transition name="zoom">
 			<router-view :key="$route.fullPath"></router-view>
-		</transition>
+		</vue-page-transition>
 
 	</div>
 	

@@ -29,9 +29,9 @@ class ProcessorQueenAttack
             $arrayDataString = array_diff($arrayDataString, [""]);
             $arrayDataString = array_values($arrayDataString);
 
-            var_dump($arrayDataString);
+
             $lenghtArrayDataString = count($arrayDataString);
-            if ($lenghtArrayDataString <= 2) {
+            if ($lenghtArrayDataString < 2) {
                 $this->error->setMessage("Invalid Data");
                 return false;
             }
@@ -47,6 +47,9 @@ class ProcessorQueenAttack
                     $firstData = array_values($firstData);
                     $secondData = array_values($secondData);
 
+
+
+
                     if (count($firstData) == 2 && count($secondData) == 2) {
 
                         $dimension = $firstData[0];
@@ -54,13 +57,14 @@ class ProcessorQueenAttack
                         $rowQueen = $secondData[0];
                         $columnQueen = $secondData[1];
 
-                        if (!$this->isNumberInRange($dimension) && $dimension >= 0 && !$this->isNumberInRange($numberOfObstacles) && $numberOfObstacles > 0) {
+
+                        if ($this->isNumberInRange($dimension) && $dimension > 0 && $this->isNumberInRange($numberOfObstacles) && $numberOfObstacles >= 0) {
                             if ($numberOfObstacles > $lenghtArrayDataString - 2) {
                                 $this->error->setMessage("number of missing obstacles");
                                 return false;
                             }
                             $this->board = new Board($dimension);
-                            if (!$this->board->pointInRangeDimensionBoard($rowQueen, $columnQueen)) {
+                            if ($this->board->pointInRangeDimensionBoard($rowQueen, $columnQueen)) {
                                 $this->board->setQueen(new Queen(new Point($this->convertRelativeRow($rowQueen, $dimension), $this->convertRelativeColumn($columnQueen))));
                             } else {
                                 $this->error->setMessage("position of the queen invalid ");
@@ -99,7 +103,7 @@ class ProcessorQueenAttack
             // $this->board = new Board($dimension);
             // $this->board->setQueen(new Queen($positionQueen));
             // $this->board->fillObstacles($obstacles);
-            echo $this->board->printBoard();
+            // echo $this->board->printBoard();
 
             return true;
         } catch (Exception $e) {
@@ -121,7 +125,7 @@ class ProcessorQueenAttack
 
     private function isNumberInRange($data)
     {
-        return preg_match("/[0-9]/", $data) === 1 && is_int($data) && $data <= 10e+5;
+        return preg_match("/^[[:digit:]]+$/", $data) && $data <= 10e+5;
     }
 
     public function getSpacesQueenAttack()
