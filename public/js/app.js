@@ -2046,7 +2046,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       input: "",
-      result: null,
+      result: [],
       error: ""
     };
   },
@@ -2055,7 +2055,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.error = "";
-      this.result = null;
+      this.result = [];
       axios.post("api/paddleleague", {
         text: this.input
       }).then(function (response) {
@@ -20740,7 +20740,7 @@ var render = function() {
           _c("pre", { staticClass: "output", attrs: { id: "output-1" } }, [
             _vm._v(
               "  " +
-                _vm._s(_vm.result == null ? "Result" : _vm.result.result) +
+                _vm._s(_vm.result == [] ? "Result" : _vm.result.result) +
                 "\n  "
             )
           ])

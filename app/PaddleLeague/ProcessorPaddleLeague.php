@@ -32,7 +32,7 @@ class ProcessorPaddleLeague
             $shortCut = $this->paddleLeague;
 
 
-            if ($countFINInWord !== count($separatingArrayCategoryString)) {
+            if ($countFINInWord !== count($separatingArrayCategoryString) || $countFINInWord == 0) {
                 $this->error->setMessage("invalid data");
                 return false;
             }
@@ -133,9 +133,7 @@ class ProcessorPaddleLeague
     {
         $response = '';
         $category = $this->paddleLeague->category;
-
         foreach ($category as $datacategory) {
-
 
             $response = $response . $datacategory->getWinner() . ' ' . $datacategory->getGamesNotPlayed() . "\n";
         }

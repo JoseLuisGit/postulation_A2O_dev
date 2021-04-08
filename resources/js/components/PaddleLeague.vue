@@ -33,7 +33,7 @@ Paddle League
  
 
   <pre id="output-1" class="output" >
-  {{result==null?"Result":result.result}}
+  {{result==""?"Result":result}}
   </pre>
  
 </div>
@@ -48,18 +48,18 @@ export default {
   data(){ 
     return {
         input:"",
-        result:null,
+        result:"",
         error: ""
 
     }},
     methods: {
         getResult: function() {
           this.error="";
-          this.result=null;
+          this.result=[];
             axios.post("api/paddleleague",{
              text: this.input
             }).then(response => {
-              this.result = response.data
+              this.result = response.data.result
             }
             ).catch(error => this.error = error.response.data.error);
         }
