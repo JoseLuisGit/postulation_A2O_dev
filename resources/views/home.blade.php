@@ -21,7 +21,7 @@
 
 		
 	
-		<vue-page-transition name="zoom">
+		<vue-page-transition name="flip-x">
 			<router-view :key="$route.fullPath"></router-view>
 		</vue-page-transition>
 

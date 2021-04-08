@@ -2039,6 +2039,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2117,6 +2120,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2153,6 +2160,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -20656,6 +20666,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "container-fluid page page-problem" }, [
+    _c(
+      "div",
+      {
+        staticClass: " button-back",
+        on: {
+          click: function($event) {
+            return _vm.$router.push("/")
+          }
+        }
+      },
+      [_vm._v("\n←\n     ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: " row" }, [
         _c("h1", { staticClass: "title title-top col-sm-12" }, [
@@ -20749,6 +20772,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "container-fluid page page-problem" }, [
+    _c(
+      "div",
+      {
+        staticClass: " button-back",
+        on: {
+          click: function($event) {
+            return _vm.$router.push("/")
+          }
+        }
+      },
+      [_vm._v("\n←\n     ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: " row" }, [
         _c("h1", { staticClass: "title title-top col-sm-12" }, [
@@ -20842,6 +20878,19 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", { staticClass: "container-fluid page page-problem" }, [
+    _c(
+      "div",
+      {
+        staticClass: " button-back",
+        on: {
+          click: function($event) {
+            return _vm.$router.push("/")
+          }
+        }
+      },
+      [_vm._v("\n←\n     ")]
+    ),
+    _vm._v(" "),
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: " row" }, [
         _c("h1", { staticClass: "title title-top col-sm-12" }, [

@@ -1,5 +1,8 @@
 <template>
    <main class="container-fluid page page-problem">
+        <div class=" button-back" v-on:click="$router.push('/')">
+&#8592;
+     </div>
 <div class="container">
 
      <div class=" row">
