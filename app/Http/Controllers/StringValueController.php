@@ -11,7 +11,7 @@ class StringValueController extends Controller
     {
         $processorStringValue = new ProcessorStringValue();
         return $processorStringValue->processorStringValue($request->text) ?
-            response()->json(['result' => $processorStringValue->getMaxStringValue()], 200) :
+            response()->json(['result' => $processorStringValue->getMaxStringValue(), 'substrings' => $processorStringValue->getSubStringValue()], 200) :
             response()->json(['error' => $processorStringValue->error->getMessage()], 422);
     }
 }

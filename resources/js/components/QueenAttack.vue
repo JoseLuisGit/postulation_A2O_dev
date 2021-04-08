@@ -18,23 +18,23 @@ Queen Attack
   {{error}}
 </div>
 <div  class="row align-items-center ">
-<div class="form-group col-lg-6 col-md-12">
+<div class="form-group col-lg-6 col-sm-12">
 
 <textarea v-model="input" name="" id="input-3" cols="30" rows="10" class="form-control"></textarea>
 </div>
 
-<div class="col-lg-6 col-md-12" >
+<div class="col-lg-6 col-sm-12" >
 <div class="button button-calculate" v-on:click="getResult()">Calculate</div>
 </div>
 </div>
 
 </div>
 
-<div class="col-md-12">
+<div class="col-sm-12">
  
 
   <pre id="output-1" class="output" >
-  {{result==null?"Result":result.result}}
+  {{result==""?"Result":result}}
   </pre>
  
 </div>
@@ -49,18 +49,18 @@ export default {
   data(){ 
     return {
         input:"",
-        result:null,
+        result:"",
         error: ""
 
     }},
     methods: {
         getResult: function() {
           this.error="";
-          this.result=null;
+          this.result="";
             axios.post("api/queenattack",{
              text: this.input
             }).then(response => {
-              this.result = response.data
+              this.result = response.data.result
             }
             ).catch(error => this.error = error.response.data.error);
         }

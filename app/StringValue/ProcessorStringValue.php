@@ -53,4 +53,9 @@ class ProcessorStringValue
 
         return $this->stringValue->getValueMax();
     }
+
+    public function getSubStringValue()
+    {
+        return $this->stringValue->subStringsValue;
+    }
 }

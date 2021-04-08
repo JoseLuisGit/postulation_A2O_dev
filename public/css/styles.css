@@ -21,10 +21,11 @@
 }
 
 
-.form{
-  position: absolute;
-  justify-content: center;
+.content-detail{
+ height: 500px;
+overflow-y: scroll;
 }
+
 
 
 .title{
@@ -62,6 +63,21 @@ font-weight: 600;
   justify-content: center;
   cursor: pointer;
   
+}
+.button-detail{
+  
+  text-align: center;
+    font-size: 70px;
+  color: white;
+   cursor: pointer;
+   font-weight: 700;
+}
+
+.button-detail:hover{
+  color: black;
+   text-shadow: 0px 0px 10px #ffffff;
+
+
 }
 
 .button-back{
@@ -117,6 +133,7 @@ border-style: ridge;
 
 textarea{
   resize: none;
+   font-family: Arial, Helvetica, sans-serif;
 }
 .output{
   font-size: 25px;

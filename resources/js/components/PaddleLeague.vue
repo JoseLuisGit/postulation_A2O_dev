@@ -17,19 +17,19 @@ Paddle League
   {{error}}
 </div>
 <div  class="row align-items-center ">
-<div class="form-group col-lg-6 col-md-12">
+<div class="form-group col-lg-6 col-sm-12">
 
 <textarea v-model="input" name="" id="input-3" cols="30" rows="10" class="form-control"></textarea>
 </div>
 
-<div class="col-lg-6 col-md-12" >
+<div class="col-lg-6 col-sm-12" >
 <div class="button button-calculate" v-on:click="getResult()">Calculate</div>
 </div>
 </div>
 
 </div>
 
-<div class="col-md-12">
+<div class="col-sm-12">
  
 
   <pre id="output-1" class="output" >
@@ -55,7 +55,7 @@ export default {
     methods: {
         getResult: function() {
           this.error="";
-          this.result=[];
+          this.result="";
             axios.post("api/paddleleague",{
              text: this.input
             }).then(response => {

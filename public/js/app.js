@@ -2046,7 +2046,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       input: "",
-      result: [],
+      result: "",
       error: ""
     };
   },
@@ -2055,11 +2055,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.error = "";
-      this.result = [];
+      this.result = "";
       axios.post("api/paddleleague", {
         text: this.input
       }).then(function (response) {
-        _this.result = response.data;
+        _this.result = response.data.result;
       })["catch"](function (error) {
         return _this.error = error.response.data.error;
       });
@@ -2128,7 +2128,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       input: "",
-      result: null,
+      result: "",
       error: ""
     };
   },
@@ -2137,11 +2137,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.error = "";
-      this.result = null;
+      this.result = "";
       axios.post("api/queenattack", {
         text: this.input
       }).then(function (response) {
-        _this.result = response.data;
+        _this.result = response.data.result;
       })["catch"](function (error) {
         return _this.error = error.response.data.error;
       });
@@ -2205,12 +2205,57 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       input: "",
-      result: null,
-      error: ""
+      result: "",
+      error: "",
+      subStrings: []
     };
   },
   methods: {
@@ -2218,14 +2263,25 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.error = "";
-      this.result = null;
+      this.result = "";
       axios.post("api/stringvalue", {
         text: this.input
       }).then(function (response) {
-        _this.result = response.data;
+        _this.result = response.data.result;
+        _this.subStrings = response.data.substrings;
       })["catch"](function (error) {
         return _this.error = error.response.data.error;
       });
+    },
+    scrollToDetail: function scrollToDetail() {
+      var el = this.$el.querySelector("#detail");
+
+      if (el) {
+        // Use el.scrollIntoView() to instantly scroll to the element
+        el.scrollIntoView({
+          behavior: 'smooth'
+        });
+      }
     }
   }
 });
@@ -20695,7 +20751,7 @@ var render = function() {
             : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row align-items-center " }, [
-            _c("div", { staticClass: "form-group col-lg-6 col-md-12" }, [
+            _c("div", { staticClass: "form-group col-lg-6 col-sm-12" }, [
               _c("textarea", {
                 directives: [
                   {
@@ -20719,7 +20775,7 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-6 col-md-12" }, [
+            _c("div", { staticClass: "col-lg-6 col-sm-12" }, [
               _c(
                 "div",
                 {
@@ -20736,12 +20792,10 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "col-sm-12" }, [
           _c("pre", { staticClass: "output", attrs: { id: "output-1" } }, [
             _vm._v(
-              "  " +
-                _vm._s(_vm.result == [] ? "Result" : _vm.result.result) +
-                "\n  "
+              "  " + _vm._s(_vm.result == "" ? "Result" : _vm.result) + "\n  "
             )
           ])
         ])
@@ -20801,7 +20855,7 @@ var render = function() {
             : _vm._e(),
           _vm._v(" "),
           _c("div", { staticClass: "row align-items-center " }, [
-            _c("div", { staticClass: "form-group col-lg-6 col-md-12" }, [
+            _c("div", { staticClass: "form-group col-lg-6 col-sm-12" }, [
               _c("textarea", {
                 directives: [
                   {
@@ -20825,7 +20879,7 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-lg-6 col-md-12" }, [
+            _c("div", { staticClass: "col-lg-6 col-sm-12" }, [
               _c(
                 "div",
                 {
@@ -20842,12 +20896,10 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "col-md-12" }, [
+        _c("div", { staticClass: "col-sm-12" }, [
           _c("pre", { staticClass: "output", attrs: { id: "output-1" } }, [
             _vm._v(
-              "  " +
-                _vm._s(_vm.result == null ? "Result" : _vm.result.result) +
-                "\n  "
+              "  " + _vm._s(_vm.result == "" ? "Result" : _vm.result) + "\n  "
             )
           ])
         ])
@@ -20877,91 +20929,165 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "container-fluid page page-problem" }, [
-    _c(
-      "div",
-      {
-        staticClass: " button-back",
-        on: {
-          click: function($event) {
-            return _vm.$router.push("/")
+  return _c("main", { attrs: { id: "main" } }, [
+    _c("div", { staticClass: "container-fluid page page-problem" }, [
+      _c(
+        "div",
+        {
+          staticClass: " button-back",
+          on: {
+            click: function($event) {
+              return _vm.$router.push("/")
+            }
           }
-        }
-      },
-      [_vm._v("\n←\n     ")]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: " row" }, [
-        _c("h1", { staticClass: "title title-top col-sm-12" }, [
-          _vm._v("\nString Value\n")
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-sm-12" }, [
-          _vm.error != ""
+        },
+        [_vm._v("\r\n←\r\n     ")]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "container " }, [
+        _c("div", { staticClass: " row" }, [
+          _c("h1", { staticClass: "title title-top col-sm-12" }, [
+            _vm._v("\r\nString Value\r\n")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-12" }, [
+            _vm.error != ""
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [_vm._v("\r\n  " + _vm._s(_vm.error) + "\r\n")]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("div", { staticClass: "row align-items-center " }, [
+              _c("div", { staticClass: "form-group col-lg-6 col-xs-12" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.input,
+                      expression: "input"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { name: "", id: "input-3", cols: "30", rows: "10" },
+                  domProps: { value: _vm.input },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.input = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-lg-6 col-xs-12" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass: "button button-calculate",
+                    on: {
+                      click: function($event) {
+                        return _vm.getResult()
+                      }
+                    }
+                  },
+                  [_vm._v("Calculate")]
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-sm-12" }, [
+            _c("pre", { staticClass: "output", attrs: { id: "output-1" } }, [
+              _vm._v(
+                "\r\n  " +
+                  _vm._s(_vm.result == "" ? "Result" : _vm.result) +
+                  "\r\n  "
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _vm.result != ""
             ? _c(
                 "div",
-                { staticClass: "alert alert-danger", attrs: { role: "alert" } },
-                [_vm._v("\n  " + _vm._s(_vm.error) + "\n")]
-              )
-            : _vm._e(),
-          _vm._v(" "),
-          _c("div", { staticClass: "row align-items-center " }, [
-            _c("div", { staticClass: "form-group col-lg-6 col-md-12" }, [
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.input,
-                    expression: "input"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { name: "", id: "input-3", cols: "30", rows: "10" },
-                domProps: { value: _vm.input },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.input = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-6 col-md-12" }, [
-              _c(
-                "div",
                 {
-                  staticClass: "button button-calculate",
+                  staticClass: "col-sm-12 button-detail",
                   on: {
                     click: function($event) {
-                      return _vm.getResult()
+                      return _vm.scrollToDetail()
                     }
                   }
                 },
-                [_vm._v("Calculate")]
+                [_vm._v("\r\n\r\n↓\r\n     ")]
               )
-            ])
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-md-12" }, [
-          _c("pre", { staticClass: "output", attrs: { id: "output-1" } }, [
-            _vm._v(
-              "  " +
-                _vm._s(_vm.result == null ? "Result" : _vm.result.result) +
-                "\n  "
-            )
-          ])
+            : _vm._e()
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm.result != ""
+      ? _c(
+          "div",
+          {
+            staticClass: "container-fluid page page-start  ",
+            attrs: { id: "detail" }
+          },
+          [
+            _c(
+              "div",
+              { class: { "content-detail": _vm.subStrings.length > 10 } },
+              [
+                _c("table", { staticClass: "table table-dark " }, [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.subStrings, function(subString) {
+                      return _c("tr", { key: subString.subString }, [
+                        _c("td", [_vm._v(_vm._s(subString.subString))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(subString.value))])
+                      ])
+                    }),
+                    0
+                  )
+                ])
+              ]
+            )
+          ]
+        )
+      : _vm._e()
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-sm-12" }, [_c("div")])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("SubString")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Value")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
