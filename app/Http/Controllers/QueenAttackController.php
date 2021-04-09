@@ -14,7 +14,7 @@ class QueenAttackController extends Controller
         $processorQueenAttack = new ProcessorQueenAttack();
 
         return $processorQueenAttack->processingWord($request->text) ?
-            response()->json(['result' => $processorQueenAttack->getSpacesQueenAttack()], 200)
+            response()->json(['result' => $processorQueenAttack->getSpacesQueenAttack(), 'board' => $processorQueenAttack->getBoard()], 200)
             :
             response()->json(['error' => $processorQueenAttack->error->getMessage()], 422);
     }

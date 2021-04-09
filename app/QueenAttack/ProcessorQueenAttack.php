@@ -64,7 +64,7 @@ class ProcessorQueenAttack
                                 return false;
                             }
                             $this->board = new Board($dimension);
-                            if ($this->board->pointInRangeDimensionBoard($rowQueen, $columnQueen)) {
+                            if ($this->board->pointInRangeDimensionBoardRelative($rowQueen, $columnQueen)) {
                                 $this->board->setQueen(new Queen(new Point($this->convertRelativeRow($rowQueen, $dimension), $this->convertRelativeColumn($columnQueen))));
                             } else {
                                 $this->error->setMessage("position of the queen invalid ");
@@ -131,5 +131,10 @@ class ProcessorQueenAttack
     public function getSpacesQueenAttack()
     {
         return  $this->board->countSpacesFreeQueen();
+    }
+
+    public function getBoard()
+    {
+        return $this->board->board;
     }
 }

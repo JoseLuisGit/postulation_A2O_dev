@@ -7,12 +7,11 @@ use App\QueenAttack\Point;
 class Queen
 {
     public Point $position;
-    public $pointFreeOfPosition;
+
 
     public function __construct($position)
     {
         $this->position = $position;
-        $this->pointFreeOfPosition = array();
     }
 
     public function getPosition()

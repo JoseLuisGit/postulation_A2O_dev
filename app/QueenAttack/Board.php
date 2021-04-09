@@ -27,6 +27,7 @@ class Board
 
     public function setQueen(Queen $queen)
     {
+        $this->board[$queen->position->row][$queen->position->column] = "Q";
         $this->queen = $queen;
     }
 
@@ -43,8 +44,13 @@ class Board
 
     public function pointInRangeDimensionBoard($row, $column)
     {
-        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension - 1) <= $row && ($row >= 0)) || (($this->dimension - 1) <= $column && $column >= 0);
+        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension - 1) >= $row && ($row >= 0)) && (($this->dimension - 1) >= $column && $column >= 0);
     }
+    public function pointInRangeDimensionBoardRelative($row, $column)
+    {
+        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension) >= $row && ($row > 0)) && (($this->dimension) >= $column && $column > 0);
+    }
+
 
     private function isInt($number)
     {
@@ -53,12 +59,14 @@ class Board
 
     public function printBoard()
     {
+        $str = '';
         for ($i = 0; $i < $this->dimension; $i++) {
             for ($j = 0; $j < $this->dimension; $j++) {
-                echo $this->board[$i][$j] . " ";
+                $str = $str . $this->board[$i][$j] . " ";
             }
-            echo "\n";
+            $str = $str . "\n";
         }
+        return $str;
     }
 
 
@@ -78,10 +86,6 @@ class Board
         return $c;
     }
 
-    public function getPointFreeOfPositionQueen()
-    {
-        return $this->queen->getPointFreeOfPosition();
-    }
 
 
     private function countHorizontalUp($position, &$c)
@@ -91,6 +95,7 @@ class Board
         $i = $position->row - 1;
         while ($i >= 0) {
             if ($this->board[$i][$position->column] !== 'X') {
+                $this->board[$i][$position->column] = 'O';
                 $c++;
             } else {
                 break;
@@ -98,8 +103,7 @@ class Board
 
             $i--;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i + 1, $position->column));
+
         return $c;
     }
 
@@ -111,6 +115,7 @@ class Board
         $i = $position->row + 1;
         while ($i < $this->dimension) {
             if ($this->board[$i][$position->column] !== 'X') {
+                $this->board[$i][$position->column] = 'O';
                 $c++;
             } else {
 
@@ -118,8 +123,7 @@ class Board
             }
             $i++;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i - 1, $position->column));
+
         return $c;
     }
 
@@ -129,6 +133,7 @@ class Board
         $i = $position->column - 1;
         while ($i >= 0) {
             if ($this->board[$position->row][$i] !== 'X') {
+                $this->board[$position->row][$i] = 'O';
                 $c++;
             } else {
 
@@ -136,8 +141,7 @@ class Board
             }
             $i--;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($position->row, $i + 1));
+
         return $c;
     }
 
@@ -147,6 +151,7 @@ class Board
         $i = $position->column + 1;
         while ($i < $this->dimension) {
             if ($this->board[$position->row][$i] !== 'X') {
+                $this->board[$position->row][$i] = 'O';
                 $c++;
             } else {
 
@@ -154,8 +159,7 @@ class Board
             }
             $i++;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($position->row, $i - 1));
+
         return $c;
     }
 
@@ -166,6 +170,7 @@ class Board
         $j = $position->column - 1;
         while ($i >= 0 && $j >= 0) {
             if ($this->board[$i][$j] !== 'X') {
+                $this->board[$i][$j] = 'O';
                 $c++;
             } else {
 
@@ -175,8 +180,7 @@ class Board
             $i--;
             $j--;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i + 1, $j + 1));
+
         return $c;
     }
     private function countDiagonalXDown($position, &$c)
@@ -185,6 +189,7 @@ class Board
         $j = $position->column + 1;
         while ($i < $this->dimension && $j < $this->dimension) {
             if ($this->board[$i][$j] !== 'X') {
+                $this->board[$i][$j] = 'O';
                 $c++;
             } else {
 
@@ -195,8 +200,7 @@ class Board
             $j++;
         }
 
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i - 1, $j - 1));
+
         return $c;
     }
 
@@ -207,6 +211,7 @@ class Board
         $j = $position->column - 1;
         while ($i < $this->dimension && $j >= 0) {
             if ($this->board[$i][$j] !== 'X') {
+                $this->board[$i][$j] = 'O';
                 $c++;
             } else {
 
@@ -215,8 +220,7 @@ class Board
             $i++;
             $j--;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i - 1, $j + 1));
+
         return $c;
     }
 
@@ -226,6 +230,7 @@ class Board
         $j = $position->column + 1;
         while ($i >= 0 && $j < $this->dimension) {
             if ($this->board[$i][$j] !== 'X') {
+                $this->board[$i][$j] = 'O';
                 $c++;
             } else {
 
@@ -234,8 +239,7 @@ class Board
             $i--;
             $j++;
         }
-        //switch type piece
-        $this->queen->addPointFreeOfPosition(new Point($i + 1, $j - 1));
+
         return $c;
     }
 }
