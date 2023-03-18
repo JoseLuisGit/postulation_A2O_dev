@@ -19,7 +19,7 @@ class StringValueController extends Controller
         $stringValue = $this->stringValueService->processText($request->all());
 
         if($this->stringValueService->hasErrors()){
-            return response()->json( $this->stringValueService->getErrors(), 422);
+            return response()->json(["error" => $this->stringValueService->getErrors()], 422);
         }
 
        return response()->json(['result' => $stringValue->getValueMax(), 'substrings' => $stringValue->getSubStringValues()], 200);
