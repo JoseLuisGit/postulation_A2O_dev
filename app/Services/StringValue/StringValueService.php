@@ -4,7 +4,6 @@ namespace App\Services\StringValue;
 use Illuminate\Support\Facades\Validator;
 use App\Services\BaseService;
 use App\StringValue\StringValue;
-use Illuminate\Validation\Rule;
 
 class StringValueService extends BaseService
 {
@@ -21,7 +20,7 @@ class StringValueService extends BaseService
             'text.regex' => 'The :attribute field must have only lowercase characters'
         ];
 
-        $validator = Validator::make($data, $validationRules);
+        $validator = Validator::make($data, $validationRules, $message);
 
         if($validator->fails()){
             $this->errors->merge($validator->errors());
