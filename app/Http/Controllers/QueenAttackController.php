@@ -3,19 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\QueenAttack\ProcessorQueenAttack;
+use App\Services\QueenAttackService;
+use Illuminate\Support\Facades\Log;
 
 class QueenAttackController extends Controller
 {
-    //
+    
+    protected $queenAttackService;
+    
+    public function __construct(QueenAttackService $queenAttackService)
+    {
+        $this->queenAttackService = $queenAttackService;
+    }
 
     public function queenAttack(Request $request)
     {
-        $processorQueenAttack = new ProcessorQueenAttack();
 
-        return $processorQueenAttack->processingWord($request->text) ?
-            response()->json(['result' => $processorQueenAttack->getSpacesQueenAttack(), 'board' => $processorQueenAttack->getBoard()], 200)
-            :
-            response()->json(['error' => $processorQueenAttack->error->getMessage()], 422);
+        $board = $this->queenAttackService->processText($request->text);
+        
+        if($this->queenAttackService->hasErrors()){
+           return response()->json(['error' => $this->queenAttackService->getErrors()], 422);
+        }
+
+        return response()->json(['result' => $board->getSpacesQueen(), 'board' => $board->getBoard()], 200);
+        
     }
 }

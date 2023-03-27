@@ -2,59 +2,120 @@
 
 namespace App\QueenAttack;
 
-use App\QueenAttack\Point;
 use App\QueenAttack\Queen;
+use Illuminate\Support\MessageBag;
 
 class Board
 {
+
+    protected const TOP_RIGHT = 'top_right';
+    protected const TOP_LEFT = 'top_left';
+    protected const DOWN_RIGHT = 'down_right';
+    protected const DOWN_LEFT = 'down_left';
+
     public $board;
     public $dimension;
-    public Queen $queen;
+    public $countSpacesQueen;
+    public MessageBag $errors;
 
 
     public function __construct($dimension)
     {
+        $this->errors = new MessageBag();
         $this->dimension = $dimension;
-        $this->initBoard();
+        $this->countSpacesQueen = 0;
     }
 
 
+    public function queenAttack(Queen $queen, array $obstacles){
+        $this->initBoard();
+        $this->setQueen($queen);
+
+        foreach($obstacles as $obstacle){
+           if(!$this->fillObstacles($queen, $obstacle)){
+                $this->errors->add('error', 'The obstacle collides with the position of the queen.');
+           }
+        }
+
+        if(!empty($this->errors)){
+            $directionFinalized = [];
+            $directions = [ self::TOP_LEFT, self::TOP_RIGHT, self::DOWN_RIGHT, self::DOWN_LEFT];
+
+            $i = 1;
+            $posQueen = $queen->getPosition();
+            while(true){
+                foreach($directions as $direction){
+                    if(!in_array($direction, $directionFinalized)){
+                        switch ($direction) {
+                            case self::TOP_LEFT:
+                                $row = $posQueen->row - $i;
+                                $col = $posQueen->column - $i;
+                                $this->markPosition($row, $col, $direction, $directionFinalized);
+                                break;
+                            case self::TOP_RIGHT:
+                                $row = $posQueen->row - $i;
+                                $col = $posQueen->column + $i;
+                                $this->markPosition($row, $col, $direction, $directionFinalized);
+                                break;
+                            case self::DOWN_RIGHT:
+                                $row = $posQueen->row + $i;
+                                $col = $posQueen->column - $i;
+                                $this->markPosition($row, $col, $direction, $directionFinalized);
+                                break;
+                            case self::DOWN_LEFT:
+                                $row = $posQueen->row + $i;
+                                $col = $posQueen->column + $i;
+                                $this->markPosition($row, $col, $direction, $directionFinalized);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                $i++;
+
+                if(count($directionFinalized) == count($directions)){
+                    break;
+                }
+            }
+        }
+    }
+
+    public function getSpacesQueen(){
+        return $this->countSpacesQueen;
+    }
+
+    private function markPosition($row, $col, $direction, &$directions){
+        if($this->inRangeAndNotObstacule($row, $col)){
+            $this->countSpacesQueen++;
+            $this->board[$row][$col] = 'O';
+        }else{
+            $directions[] = $direction;
+        }
+    }
+
+    private function inRangeAndNotObstacule($row, $col){
+        return $row <= ( $this->dimension - 1 ) && $row >= 0 &&
+               $col <= ( $this->dimension - 1 ) && $col >= 0 && $this->board[$row][$col] !== 'X';
+    }
 
     private function initBoard()
     {
-        $this->board = array_fill(0, $this->dimension, array_fill(0, $this->dimension, 0));
+        $this->board = array_fill(0, $this->dimension, array_fill(0, $this->dimension, ''));
     }
 
     public function setQueen(Queen $queen)
     {
-        $this->board[$queen->position->row][$queen->position->column] = "Q";
-        $this->queen = $queen;
+        $this->board[$queen->getRow()][$queen->getColumn()] = "Q";
     }
 
-    public function fillObstacles($obstacle)
+    public function fillObstacles(Queen $queen, $obstacle)
     {
-        $positionQueen = $this->queen->getPosition();
-
-        if (!$this->pointInRangeDimensionBoard($obstacle->row, $obstacle->column) && $positionQueen->row === $obstacle->row && $positionQueen->column === $obstacle->column) {
+        if($obstacle->row == $queen->getRow() && $obstacle->column == $queen->getColumn()){
             return false;
         }
         $this->board[$obstacle->row][$obstacle->column] = "X";
         return true;
-    }
-
-    public function pointInRangeDimensionBoard($row, $column)
-    {
-        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension - 1) >= $row && ($row >= 0)) && (($this->dimension - 1) >= $column && $column >= 0);
-    }
-    public function pointInRangeDimensionBoardRelative($row, $column)
-    {
-        return $this->isInt($row)  && $this->isInt($column) && (($this->dimension) >= $row && ($row > 0)) && (($this->dimension) >= $column && $column > 0);
-    }
-
-
-    private function isInt($number)
-    {
-        return preg_match('/^-?[0-9]+$/', $number);
     }
 
     public function printBoard()
@@ -69,177 +130,8 @@ class Board
         return $str;
     }
 
-
-
-    public function countSpacesFreeQueen()
-    {
-        $c = 0;
-        $positionQueen = $this->queen->getPosition();
-        $this->countHorizontalUp($positionQueen, $c);
-        $this->countHorizontalDown($positionQueen, $c);
-        $this->countVerticalRight($positionQueen, $c);
-        $this->countVerticalLeft($positionQueen, $c);
-        $this->countDiagonalXUp($positionQueen, $c);
-        $this->countDiagonalXDown($positionQueen, $c);
-        $this->countDiagonalYDown($positionQueen, $c);
-        $this->countDiagonalYUp($positionQueen, $c);
-        return $c;
+    public function getBoard(){
+        return $this->board;
     }
 
-
-
-    private function countHorizontalUp($position, &$c)
-    {
-        // ^
-        // |  row(-)
-        $i = $position->row - 1;
-        while ($i >= 0) {
-            if ($this->board[$i][$position->column] !== 'X') {
-                $this->board[$i][$position->column] = 'O';
-                $c++;
-            } else {
-                break;
-            }
-
-            $i--;
-        }
-
-        return $c;
-    }
-
-    private function countHorizontalDown($position, &$c)
-    {
-
-        // |
-        // v row(+)
-        $i = $position->row + 1;
-        while ($i < $this->dimension) {
-            if ($this->board[$i][$position->column] !== 'X') {
-                $this->board[$i][$position->column] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-            $i++;
-        }
-
-        return $c;
-    }
-
-    private function countVerticalLeft($position, &$c)
-    {
-        // <---- 
-        $i = $position->column - 1;
-        while ($i >= 0) {
-            if ($this->board[$position->row][$i] !== 'X') {
-                $this->board[$position->row][$i] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-            $i--;
-        }
-
-        return $c;
-    }
-
-    private function countVerticalRight($position, &$c)
-    {
-        // ----> 
-        $i = $position->column + 1;
-        while ($i < $this->dimension) {
-            if ($this->board[$position->row][$i] !== 'X') {
-                $this->board[$position->row][$i] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-            $i++;
-        }
-
-        return $c;
-    }
-
-
-    private function countDiagonalXUp($position, &$c)
-    {
-        $i = $position->row - 1;
-        $j = $position->column - 1;
-        while ($i >= 0 && $j >= 0) {
-            if ($this->board[$i][$j] !== 'X') {
-                $this->board[$i][$j] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-
-            $i--;
-            $j--;
-        }
-
-        return $c;
-    }
-    private function countDiagonalXDown($position, &$c)
-    {
-        $i = $position->row + 1;
-        $j = $position->column + 1;
-        while ($i < $this->dimension && $j < $this->dimension) {
-            if ($this->board[$i][$j] !== 'X') {
-                $this->board[$i][$j] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-
-            $i++;
-            $j++;
-        }
-
-
-        return $c;
-    }
-
-    private function countDiagonalYDown($position, &$c)
-    {
-
-        $i = $position->row + 1;
-        $j = $position->column - 1;
-        while ($i < $this->dimension && $j >= 0) {
-            if ($this->board[$i][$j] !== 'X') {
-                $this->board[$i][$j] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-            $i++;
-            $j--;
-        }
-
-        return $c;
-    }
-
-    private function countDiagonalYUp($position, &$c)
-    {
-        $i = $position->row - 1;
-        $j = $position->column + 1;
-        while ($i >= 0 && $j < $this->dimension) {
-            if ($this->board[$i][$j] !== 'X') {
-                $this->board[$i][$j] = 'O';
-                $c++;
-            } else {
-
-                break;
-            }
-            $i--;
-            $j++;
-        }
-
-        return $c;
-    }
 }

@@ -2,12 +2,12 @@
 
 namespace App\QueenAttack;
 
-use App\QueenAttack\Point;
+use App\Helpers\PositionHelper;
+use App\QueenAttack\Position;
 
 class Queen
 {
-    public Point $position;
-
+    public Position $position;
 
     public function __construct($position)
     {
@@ -16,19 +16,15 @@ class Queen
 
     public function getPosition()
     {
-
         return $this->position;
     }
 
-
-
-    public function addPointFreeOfPosition(Point $point)
-    {
-        $this->pointFreeOfPosition[] =  $point;
+    public function getRow(){
+        return $this->getPosition()->row;
     }
 
-    public function getPointFreeOfPosition()
-    {
-        return $this->pointFreeOfPosition;
+    public function getColumn(){
+        return $this->getPosition()->column;
     }
+
 }

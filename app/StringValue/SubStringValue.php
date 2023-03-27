@@ -11,7 +11,7 @@ class SubStringValue
     public function __construct($subString, $value)
     {
         $this->subString = $subString;
-        $this->value = $value;
+        $this->value = strlen($subString) * $value;
     }
 
     public function getValue()

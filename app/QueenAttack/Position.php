@@ -2,7 +2,7 @@
 
 namespace App\QueenAttack;
 
-class Point
+class Position
 {
     public $row;
     public $column;
