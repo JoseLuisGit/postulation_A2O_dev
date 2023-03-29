@@ -1,12 +1,11 @@
 <?php
+
 namespace App\Services;
 
 use App\Helpers\PositionHelper;
 use App\QueenAttack\Board;
-use App\QueenAttack\Point;
 use App\QueenAttack\Queen;
 use Exception;
-use Illuminate\Support\Facades\Log;
 
 class QueenAttackService extends BaseService
 {
@@ -16,11 +15,11 @@ class QueenAttackService extends BaseService
 
             $inputs = explode("\n", $text);
 
-            if(count($inputs) < 2){
+            if (count($inputs) < 2) {
                 $this->errors->add('error', 'insufficient data');
             }
 
-            if(!$this->hasErrors()){
+            if (!$this->hasErrors()) {
                 $firstInput = explode(' ', rtrim($inputs[0]));
                 $dimension = intval($firstInput[0]);
                 $numObstacles = intval($firstInput[1]);
@@ -30,7 +29,7 @@ class QueenAttackService extends BaseService
                 $colPos = intval($secondInput[1]);
 
                 $obstacles = [];
-                for($i = 0; $i < $numObstacles; $i++){
+                for ($i = 0; $i < $numObstacles; $i++) {
                     $obstacle = explode(' ', rtrim($inputs[$i + 2]));
                     $obstaclePos = PositionHelper::getPositionRelative($dimension, $obstacle[0], $obstacle[1]);
                     $obstacles[] = $obstaclePos;
@@ -42,17 +41,14 @@ class QueenAttackService extends BaseService
 
                 $board->queenAttack($queen, $obstacles);
 
-                if(count($board->errors) > 0){
+                if (count($board->errors) > 0) {
                     $this->errors->merge($board->errors);
                 }
 
                 return $board;
             }
-
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             $this->errors->add('error', 'Invalid data');
         }
     }
-
 }

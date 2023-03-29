@@ -8,10 +8,14 @@ use Illuminate\Support\MessageBag;
 class Board
 {
 
-    protected const TOP_RIGHT = 'top_right';
-    protected const TOP_LEFT = 'top_left';
-    protected const DOWN_RIGHT = 'down_right';
-    protected const DOWN_LEFT = 'down_left';
+    protected const TOP = 'top';
+    protected const LEFT = 'left';
+    protected const DOWN = 'down';
+    protected const RIGHT = 'right';
+    protected const TOP_DIAGONAL_RIGHT = 'top_diagonal_right';
+    protected const TOP_DIAGONAL_LEFT = 'top_diagonal_left';
+    protected const DOWN_DIAGONAL_RIGHT = 'down_diagonal_right';
+    protected const DOWN_DIAGONAL_LEFT = 'down_diagonal_left';
 
     public $board;
     public $dimension;
@@ -27,76 +31,109 @@ class Board
     }
 
 
-    public function queenAttack(Queen $queen, array $obstacles){
+    public function queenAttack(Queen $queen, array $obstacles)
+    {
         $this->initBoard();
         $this->setQueen($queen);
 
-        foreach($obstacles as $obstacle){
-           if(!$this->fillObstacles($queen, $obstacle)){
+        foreach ($obstacles as $obstacle) {
+            if (!$this->fillObstacles($queen, $obstacle)) {
                 $this->errors->add('error', 'The obstacle collides with the position of the queen.');
-           }
+            }
         }
 
-        if(!empty($this->errors)){
-            $directionFinalized = [];
-            $directions = [ self::TOP_LEFT, self::TOP_RIGHT, self::DOWN_RIGHT, self::DOWN_LEFT];
+        if (!empty($this->errors)) {
+            $directions = [
+                self::TOP_DIAGONAL_LEFT, self::TOP, self::TOP_DIAGONAL_RIGHT,
+                self::RIGHT, self::DOWN_DIAGONAL_RIGHT, self::DOWN, self::DOWN_DIAGONAL_LEFT,
+                self::LEFT
+            ];
+            $this->markSpacePiece($queen->getPosition(), $directions);
+        }
+    }
+    
 
-            $i = 1;
-            $posQueen = $queen->getPosition();
-            while(true){
-                foreach($directions as $direction){
-                    if(!in_array($direction, $directionFinalized)){
-                        switch ($direction) {
-                            case self::TOP_LEFT:
-                                $row = $posQueen->row - $i;
-                                $col = $posQueen->column - $i;
-                                $this->markPosition($row, $col, $direction, $directionFinalized);
-                                break;
-                            case self::TOP_RIGHT:
-                                $row = $posQueen->row - $i;
-                                $col = $posQueen->column + $i;
-                                $this->markPosition($row, $col, $direction, $directionFinalized);
-                                break;
-                            case self::DOWN_RIGHT:
-                                $row = $posQueen->row + $i;
-                                $col = $posQueen->column - $i;
-                                $this->markPosition($row, $col, $direction, $directionFinalized);
-                                break;
-                            case self::DOWN_LEFT:
-                                $row = $posQueen->row + $i;
-                                $col = $posQueen->column + $i;
-                                $this->markPosition($row, $col, $direction, $directionFinalized);
-                                break;
-                            default:
-                                break;
-                        }
+    public function markSpacePiece(Position $piecePosition, array $directions)
+    {
+        $directionFinalized = [];
+
+        $i = 1;
+        while (true) {
+            foreach ($directions as $direction) {
+                if (!in_array($direction, $directionFinalized)) {
+                    switch ($direction) {
+                        case self::TOP_DIAGONAL_LEFT:
+                            $row = $piecePosition->row - $i;
+                            $col = $piecePosition->column - $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::TOP:
+                            $row = $piecePosition->row - $i;
+                            $col = $piecePosition->column;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::TOP_DIAGONAL_RIGHT:
+                            $row = $piecePosition->row - $i;
+                            $col = $piecePosition->column + $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::RIGHT:
+                            $row = $piecePosition->row;
+                            $col = $piecePosition->column + $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::DOWN_DIAGONAL_RIGHT:
+                            $row = $piecePosition->row + $i;
+                            $col = $piecePosition->column + $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::DOWN:
+                            $row = $piecePosition->row + $i;
+                            $col = $piecePosition->column;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::DOWN_DIAGONAL_LEFT:
+                            $row = $piecePosition->row + $i;
+                            $col = $piecePosition->column - $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        case self::LEFT:
+                            $row = $piecePosition->row;
+                            $col = $piecePosition->column - $i;
+                            $this->markPosition($row, $col, $direction, $directionFinalized);
+                            break;
+                        default:
+                            break;
                     }
                 }
-                $i++;
+            }
+            $i++;
 
-                if(count($directionFinalized) == count($directions)){
-                    break;
-                }
+            if (count($directionFinalized) == count($directions)) {
+                break;
             }
         }
     }
 
-    public function getSpacesQueen(){
+    public function getSpacesQueen()
+    {
         return $this->countSpacesQueen;
     }
 
-    private function markPosition($row, $col, $direction, &$directions){
-        if($this->inRangeAndNotObstacule($row, $col)){
+    private function markPosition($row, $col, $direction, &$directions)
+    {
+        if ($this->inRangeAndNotObstacule($row, $col)) {
             $this->countSpacesQueen++;
             $this->board[$row][$col] = 'O';
-        }else{
+        } else {
             $directions[] = $direction;
         }
     }
 
-    private function inRangeAndNotObstacule($row, $col){
-        return $row <= ( $this->dimension - 1 ) && $row >= 0 &&
-               $col <= ( $this->dimension - 1 ) && $col >= 0 && $this->board[$row][$col] !== 'X';
+    private function inRangeAndNotObstacule($row, $col)
+    {
+        return $row <= ($this->dimension - 1) && $row >= 0 &&
+            $col <= ($this->dimension - 1) && $col >= 0 && $this->board[$row][$col] !== 'X';
     }
 
     private function initBoard()
@@ -111,7 +148,7 @@ class Board
 
     public function fillObstacles(Queen $queen, $obstacle)
     {
-        if($obstacle->row == $queen->getRow() && $obstacle->column == $queen->getColumn()){
+        if ($obstacle->row == $queen->getRow() && $obstacle->column == $queen->getColumn()) {
             return false;
         }
         $this->board[$obstacle->row][$obstacle->column] = "X";
@@ -130,8 +167,8 @@ class Board
         return $str;
     }
 
-    public function getBoard(){
+    public function getBoard()
+    {
         return $this->board;
     }
-
 }
